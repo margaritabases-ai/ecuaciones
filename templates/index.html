@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solucionador de ecuaciones diferenciales lineales de 2do orden</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    
+    <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      }
+    };
+    </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background-color: #f0f2f5; color: #333; }
         h1 { text-align: center; color: #2c3e50; margin-bottom: 30px; }
         
-        /* Estilos del Input */
         .input-container {
             background: white; padding: 30px; border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -27,7 +34,6 @@
         }
         button:hover { background-color: #0056b3; }
 
-        /* Resultados */
         #resultados { margin-top: 30px; }
         .paso {
             background: white; margin-bottom: 20px; padding: 20px;
@@ -38,12 +44,10 @@
         .paso.visible { opacity: 1; transform: translateY(0); }
         .paso h3 { margin-top: 0; color: #28a745; font-size: 1.1em; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Autores */
         .authors {
             margin-top: 50px; padding-top: 20px; border-top: 1px solid #ccc;
             text-align: center; font-size: 0.9em; color: #666;
         }
-        .authors strong { color: #333; }
     </style>
 </head>
 <body>
@@ -51,24 +55,15 @@
     <h1>Solucionador de ecuaciones diferenciales lineales de 2do orden</h1>
 
     <div class="input-container">
-        <select id="signA">
-            <option value="1">+</option>
-            <option value="-1">-</option>
-        </select>
+        <select id="signA"><option value="1">+</option><option value="-1">-</option></select>
         <input type="number" id="valA" value="1" min="0" step="any"> 
         <span>\( y'' \)</span>
 
-        <select id="signB">
-            <option value="1">+</option>
-            <option value="-1">-</option>
-        </select>
+        <select id="signB"><option value="1">+</option><option value="-1">-</option></select>
         <input type="number" id="valB" value="5" min="0" step="any"> 
         <span>\( y' \)</span>
 
-        <select id="signC">
-            <option value="1">+</option>
-            <option value="-1">-</option>
-        </select>
+        <select id="signC"><option value="1">+</option><option value="-1">-</option></select>
         <input type="number" id="valC" value="6" min="0" step="any"> 
         <span>\( y = 0 \)</span>
 
@@ -79,37 +74,28 @@
 
     <div class="authors">
         <p>Desarrollado por:</p>
-        <p><strong>Carlos Alberto Cruz Guzman</strong> & <strong>Israel Romero Ortega</strong></p>
-        <p>Programa de Ecuaciones Diferenciales</p>
+        <p><strong>Autor 1</strong> & <strong>Autor 2</strong></p>
     </div>
 
     <script>
         async function resolver() {
-            // Obtenemos valores y signos
             const valA = document.getElementById('valA').value;
             const signA = document.getElementById('signA').value;
-            
             const valB = document.getElementById('valB').value;
             const signB = document.getElementById('signB').value;
-            
             const valC = document.getElementById('valC').value;
             const signC = document.getElementById('signC').value;
 
             const contenedor = document.getElementById('resultados');
             contenedor.innerHTML = "";
 
-            // Validación simple
             if(!valA || !valB || !valC) { alert("Por favor ingresa todos los números"); return; }
             if(valA == 0) { alert("El coeficiente 'a' no puede ser 0"); return; }
 
             const response = await fetch('/resolver', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    valA, signA,
-                    valB, signB,
-                    valC, signC
-                })
+                body: JSON.stringify({ valA, signA, valB, signB, valC, signC })
             });
 
             const data = await response.json();
